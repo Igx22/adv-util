@@ -5,7 +5,15 @@
 
     <groupId>adv</groupId>
     <artifactId>adv-util</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
+
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.source>1.8</project.build.source>
+        <project.build.target>1.8</project.build.target>
+    </properties>
 
 
     <dependencies>
@@ -13,33 +21,73 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-			 <version>${slf4j.version}</version>
+            <version>1.7.5</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-			<version>3.1</version>
+            <version>3.1</version>
         </dependency>
 
 
         <dependency>
             <groupId>com.intellij</groupId>
             <artifactId>annotations</artifactId>
-			<version>9.0.4</version>
+            <version>9.0.4</version>
         </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-			<version>2.4</version>
+            <version>2.4</version>
+        </dependency>
+
+        <!--  в 0.9.29 убрали вывод статуса при старте если debug=false в конфигурации  -->
+        <!--  в 1.1.1 исправили удаление старых логов http://jira.qos.ch/browse/LOGBACK-162 -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.1.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+            <version>1.1.7</version>
         </dependency>
 
     </dependencies>
 
     <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <source>${project.build.source}</source>
+                    <target>${project.build.target}</target>
+                    <fork>true</fork>
+                    <encoding>UTF8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
 
     </build>
-
 
 </project>
