@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+
+KNOWN ISSUES:
+
+logback manual
+@see http://logback.qos.ch/codes.html#layoutInsteadOfEncoder
+@see http://logback.qos.ch/manual/encoders.html
+@see http://logback.qos.ch/manual/appenders.html#RollingFileAppender
+
+maxHistory doesnot normally work in SizeAndTimeBasedFNATP http://jira.qos.ch/browse/LOGBACK-747
+NDC is in slf4j-ext http://mailman.qos.ch/pipermail/slf4j-user/2009-July/000784.html
+separate logging per appender
+   http://stackoverflow.com/questions/5653062/how-can-i-configure-logback-to-log-different-levels-for-a-logger-to-different-de?rq=1
+   http://stackoverflow.com/questions/2492022/how-to-roll-the-log-file-on-startup-in-logback
+
+
+include files: <include file="src/main/java/chapters/configuration/includedConfig.xml"/>
+
+compress package names http://stackoverflow.com/questions/7891910/log4j-abbreviate-shorten-package-names
+
+variables http://logback.qos.ch/manual/configuration.html#variableSubstitution
+
+immediate flush http://logback.10977.n7.nabble.com/log4j-performance-comparison-td2994.html
+
+<timestamp key="bySecond" datePattern="yyyyMMdd'T'HHmmss"/>
+-->
+<configuration debug="true">
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener"/>
+    <property name="cleanPolicy" value="adv.logback.TriggeringPolicyEx"/>
+    <property name="rollPolicy" value="adv.logback.RollingPolicyEx"/>
+
+    <property name="fastLogbackFormatter" value="adv.logback.FastLogbackFormatter"/>
+    <property name="rollingFileAppender" value="ch.qos.logback.core.rolling.RollingFileAppender"/>
+
+    <property name="maxHistory" value="7"/>
+    <property name="maxFileSize" value="200MB"/>
+    <property name="totalSizeCap" value="20GB"/>
+    <property name="gzPattern" value=".%d{yyyyMMdd}.%d{HHmm}.%i.log.gz"/>
+
+    <!-- default logs -->
+
+    <appender name="consolelog" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="${fastLogbackFormatter}"/>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <appender name="debuglog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="${fastLogbackFormatter}"/>
+        <file>log/debug.log</file>
+        <rollingPolicy class="${rollPolicy}">
+            <fileNamePattern>log\debug${gzPattern}</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="${cleanPolicy}">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxHistory}</maxHistory>
+            <totalSizeCap>${totalSizeCap}}</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>TRACE</level>
+        </filter>
+    </appender>
+
+    <appender name="infolog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="${fastLogbackFormatter}"/>
+        <file>log/info.log</file>
+        <rollingPolicy class="${rollPolicy}">
+            <fileNamePattern>log\info${gzPattern}</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="${cleanPolicy}">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxHistory}</maxHistory>
+            <totalSizeCap>${totalSizeCap}}</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <appender name="errorlog" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <encoder class="${fastLogbackFormatter}"/>
+        <file>log/error.log</file>
+        <rollingPolicy class="${rollPolicy}">
+            <fileNamePattern>log\error${gzPattern}</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy class="${cleanPolicy}">
+                <maxFileSize>${maxFileSize}</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxFileSize>${maxFileSize}</maxFileSize>
+            <maxHistory>${maxHistory}</maxHistory>
+            <totalSizeCap>${totalSizeCap}}</totalSizeCap>
+            <cleanHistoryOnStart>true</cleanHistoryOnStart>
+        </rollingPolicy>
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+    <root level="TRACE">
+        <appender-ref ref="consolelog"/>
+        <appender-ref ref="debuglog"/>
+        <appender-ref ref="infolog"/>
+        <appender-ref ref="errorlog"/>
+    </root>
+
+    <!-- logger levels -->
+
+
+
+    <logger name="org.hibernate" level="INFO"/>
+    <logger name="org.apache.http" level="INFO"/>
+    <logger name="org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor" level="INFO"/>
+    <logger name="org.springframework" level="DEBUG"/>
+    <logger name="org.springframework.web" level="DEBUG"/>
+    <!-- http://stackoverflow.com/questions/30431776/using-scheduled-and-enablescheduling-but-gives-nosuchbeandefinitionexception -->
+    <logger name="org.springframework.scheduling.annotation.ScheduledAnnotationBeanPostProcessor" level="INFO"/>
+    <logger name="biz.adv" level="DEBUG"/>
+    <logger name="biz.adv.ssp" level="DEBUG"/>
+    <!-- org.apache.http -->
+    <logger name="com.couchbase" level="DEBUG"/>
+    <logger name="org.asynchttpclient" level="DEBUG"/>
+
+</configuration>
