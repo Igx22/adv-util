@@ -58,7 +58,7 @@ public class StringUtil {
         return value.replaceAll("[^\\w\\-_\\.]", "");
     }
 
-    public static String toOneLine(String str) {
+    public static String toOneLineRegex(String str) {
         if (str == null) {
             return null;
         }
@@ -158,6 +158,68 @@ public class StringUtil {
         } catch (CharacterCodingException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    /*
+    id: "7395566753524774831f36b641dd1ff2" eatbid {  bid {    id: "134f0d6ce87f456ca22510f56d7b3316"    impid: "675987d1c88c4044be0a4bbbb6ecde0e0"    price: 1.0    adid: "ad123"    nurl: "http://dsp1.local:8083/nurl?&imp=675987d1c88c4044be0a4bbbb6ecde0e0"    adm: "http://pogoda.ru"    [biz.adv.openrtb.advbiz.BidExt.ext] {      secondPrice: 0.5    }  }
+
+    vs
+
+    id: "7395566753524774831f36b641dd1ff2"
+seatbid {
+  bid {
+    id: "134f0d6ce87f456ca22510f56d7b3316"
+    impid: "675987d1c88c4044be0a4bbbb6ecde0e0"
+    price: 1.0
+    adid: "ad123"
+    nurl: "http://dsp1.local:8083/nurl?&imp=675987d1c88c4044be0a4bbbb6ecde0e0"
+    adm: "http://pogoda.ru"
+    [biz.adv.openrtb.advbiz.BidExt.ext] {
+      secondPrice: 0.5
+    }
+  }
+}
+
+     */
+    public static String toStringOneLine(Object obj) {
+        if (obj == null) {
+            return "null";
+        }
+        String input = null;
+        if (obj instanceof String) {
+            input = (String) obj;
+        } else {
+            input = obj.toString();
+        }
+        if (StringUtil.isEmpty(input)) {
+            return input;
+        }
+        int pos = input.indexOf('\n');
+        if (pos == -1) {
+            pos = input.indexOf('\r');
+        }
+        if (pos == -1) {
+            return input;
+        }
+        StringBuilder sb = new StringBuilder(input.length() + 10);
+        boolean seenNewLine = false;
+        for (int i = 0; i < input.length(); i++) {
+            char c = input.charAt(i);
+            if (c == '\n') {
+                seenNewLine = true;
+            } else {
+                if (seenNewLine && c != ' ' && c != '\t') {
+                    // добавим пробел если эта буква не "разделитель"
+                    sb.append(" ");
+                    sb.append(c);
+                } else {
+                    sb.append(c);
+                }
+                seenNewLine = false;
+
+            }
+        }
+        return sb.toString();
     }
 }
 
