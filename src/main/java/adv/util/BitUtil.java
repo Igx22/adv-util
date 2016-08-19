@@ -148,8 +148,13 @@ public class BitUtil {
 
     public static boolean isBase16String(String base16StringToCheck, int expectedLength) {
         int len = base16StringToCheck.length();
-        if (len != expectedLength) {
+        if ((len % 2) != 0) {
             return false;
+        }
+        if (expectedLength > 0) {
+            if (len != expectedLength) {
+                return false;
+            }
         }
         for (int i = 0; i < len; i += 2) {
             int high = Character.digit(base16StringToCheck.charAt(i), 16);
