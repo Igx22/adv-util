@@ -37,7 +37,7 @@ immediate flush http://logback.10977.n7.nabble.com/log4j-performance-comparison-
     <property name="maxHistory" value="7"/>
     <property name="maxFileSize" value="200MB"/>
     <property name="totalSizeCap" value="20GB"/>
-    <property name="gzPattern" value=".%d{yyyyMMdd}.%d{HHmm}.%i.log.gz"/>
+    <property name="gzPattern" value=".%d{yyyyMMdd}.%i.log.gz"/>
 
     <!-- default logs -->
 
