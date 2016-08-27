@@ -8,6 +8,7 @@ import java.io.*;
 import java.nio.charset.Charset;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
+import java.util.zip.ZipOutputStream;
 
 // see http://stackoverflow.com/questions/4773778/creating-zip-archive-in-java
 public class ZipUtil {
@@ -27,16 +28,54 @@ public class ZipUtil {
                 String fileName = new File(entry.getName()).getName();
                 log.debug("readZipStream(): fileName: '{}' size: {}, entry: '{}'", fileName, size, entry.getName());
                 byte[] data = ZipUtil.extractEntry(entry, is);
-                handler.handle(entry.getName(), fileName, data, size);
+                handler.handle(entry.getName(), fileName, data);
             }
         } finally {
-            is.close();
+            try {
+                is.close();
+            } catch (IOException ignored) {
+            }
         }
 
     }
 
+    public static String removeNonWordChars(String value) {
+        if (value == null || "".equals(value)) {
+            return value;
+        }
+        return value.replaceAll("[^\\w\\-_\\.a-яA-Я\\(\\)\\[\\]\\s]", "_");
+    }
+
+    public static void writeZip(String archiveFileName, InputStream sourceBytes, OutputStream target) {
+        String entryName = removeNonWordChars(archiveFileName);
+        log.debug("creating archive entry: '{}' cleared to => '{}'", archiveFileName, entryName);
+        try {
+            ZipOutputStream out = null;
+            try {
+                out = new ZipOutputStream(target, CharsetUtil.CP866);
+                out.putNextEntry(new ZipEntry(entryName));
+                StreamUtils.copyStream(sourceBytes, out);
+            } finally {
+                if (out != null) {
+                    try {
+                        out.closeEntry();
+                    } catch (IOException ignored) {
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException ignored) {
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public interface ZipEntryHandler {
-        void handle(String fullName, String fileName, byte[] data, long size);
+        void handle(String fullName, String fileName, byte[] data);
     }
 
     public static byte[] extractEntry(final ZipEntry entry, InputStream zipStream) throws IOException {

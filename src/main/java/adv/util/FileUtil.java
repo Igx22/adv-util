@@ -1,6 +1,7 @@
 package adv.util;
 
 import org.apache.commons.io.IOUtils;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,7 +81,10 @@ public class FileUtil {
         }
     }
 
-    public static void safeRemoveFile(File f, int retryCount, long delay, TimeUnit timeUnit) {
+    public static void safeRemoveFile(@Nullable File f, int retryCount, long delay, TimeUnit timeUnit) {
+        if (f == null) {
+            return;
+        }
         boolean success = false;
         for (int retries = 0; !success && retries < retryCount; retries++) {
             if (retries > 0) {
