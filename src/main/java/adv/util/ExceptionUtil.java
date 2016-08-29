@@ -2,6 +2,7 @@ package adv.util;
 
 /**
  */
+@SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class ExceptionUtil {
 
     public static String stackTraceToString(Throwable e) {
@@ -26,6 +27,21 @@ public class ExceptionUtil {
             sb.append(stackTraceToString(e.getCause()));
         }
         return sb.toString();
+    }
+
+
+    public static Throwable getRootCause(Throwable throwable) {
+        if (throwable == null) {
+            return null;
+        }
+        if (throwable.getCause() != null)
+            return getRootCause(throwable.getCause());
+        return throwable;
+    }
+
+    public static String getRootCauseMessage(Throwable throwable) {
+        Throwable rootCause = getRootCause(throwable);
+        return rootCause == null ? "" : rootCause.getMessage();
     }
 
     public static void main(String[] args) {
