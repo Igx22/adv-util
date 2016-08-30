@@ -2,11 +2,11 @@ package adv.util;
 
 import java.util.stream.Stream;
 
-public interface Encodeable {
+public interface Encodable {
 
     String token();
 
-    public static <E extends Enum<E> & Encodeable> E forToken(Class<E> cls, String tok) {
+    public static <E extends Enum<E> & Encodable> E forToken(Class<E> cls, String tok) {
         final String t = tok.trim().toUpperCase();
         return Stream.of(cls.getEnumConstants())
                 .filter(e -> e.token().equals(t))
