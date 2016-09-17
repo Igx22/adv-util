@@ -1,9 +1,19 @@
 package adv.util;
 
+import java.io.IOException;
+
 /**
  */
 @SuppressWarnings("ThrowableResultOfMethodCallIgnored")
 public class ExceptionUtil {
+
+    public static void runUnchecked(CheckedRunnable r) {
+        try {
+            r.run();
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        }
+    }
 
     public static String stackTraceToString(Throwable e) {
         final int stackTraceDepthToUse = 5;
@@ -44,7 +54,14 @@ public class ExceptionUtil {
         return rootCause == null ? "" : rootCause.getMessage();
     }
 
+    public interface CheckedRunnable {
+        void run() throws Exception;
+    }
+
     public static void main(String[] args) {
+        runUnchecked(() -> {
+            throw new IOException();
+        });
         System.out.println(stackTraceToString(new IllegalStateException("test")));
         System.out.println();
         System.out.println();

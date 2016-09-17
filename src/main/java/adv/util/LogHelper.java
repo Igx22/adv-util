@@ -15,6 +15,7 @@ import java.util.Map;
 /**
  * Log utils.
  */
+@SuppressWarnings("unchecked")
 public final class LogHelper {
     /**
      * Log intance.

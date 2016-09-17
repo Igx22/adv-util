@@ -13,6 +13,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.build.source>1.8</project.build.source>
         <project.build.target>1.8</project.build.target>
+
+        <junit.version>4.12</junit.version>
+
     </properties>
 
 
@@ -56,6 +59,13 @@
             <artifactId>logback-core</artifactId>
             <version>1.1.7</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+        </dependency>
+
 
     </dependencies>
 

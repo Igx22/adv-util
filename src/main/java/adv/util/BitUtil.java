@@ -413,7 +413,7 @@ public class BitUtil {
         if (data == null || data.length == 0 || data.length != 4) {
             throw new IllegalStateException("no data");
         }
-        return readBEInt(data);
+        return readBEInt(data, 0);
     }
 
     public static long readBELong(byte[] data) {
