@@ -39,15 +39,8 @@ public class ZipUtil {
 
     }
 
-    public static String removeNonWordChars(String value) {
-        if (value == null || "".equals(value)) {
-            return value;
-        }
-        return value.replaceAll("[^\\w\\-_\\.a-яA-Я\\(\\)\\[\\]\\s]", "_");
-    }
-
     public static void writeZip(String archiveFileName, InputStream sourceBytes, OutputStream target) {
-        String entryName = removeNonWordChars(archiveFileName);
+        String entryName = StringUtil.removeZipIncompatibleChars(archiveFileName);
         log.debug("creating archive entry: '{}' cleared to => '{}'", archiveFileName, entryName);
         try {
             ZipOutputStream out = null;

@@ -221,6 +221,13 @@ seatbid {
         }
         return sb.toString();
     }
+
+    public static String removeZipIncompatibleChars(String value) {
+        if (value == null || "".equals(value)) {
+            return value;
+        }
+        return value.replaceAll("[^\\w\\-_\\.a-яA-Я\\(\\)\\[\\]\\s]", "_");
+    }
 }
 
 
