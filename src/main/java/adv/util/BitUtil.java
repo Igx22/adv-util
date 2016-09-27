@@ -8,6 +8,14 @@ import java.io.ByteArrayOutputStream;
 import java.util.*;
 
 public class BitUtil {
+    public static final long INT8_MAX = Byte.MAX_VALUE;
+    public static final long INT16_MAX = Short.MAX_VALUE;
+    public static final long INT32_MAX = Integer.MAX_VALUE;
+    public static final long INT64_MAX = Long.MAX_VALUE;
+    public static final long UINT8_MAX = 0xFFL;
+    public static final long UINT16_MAX = 0xFFFFL;
+    public static final long UINT32_MAX = 0xFFFFFFFFL;
+    public static final long UINT64_MAX = 0xFFFFFFFFFFFFFFFFL;
     private static final char[] HEX = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
 
     public static String toBase16(byte[] data) {
