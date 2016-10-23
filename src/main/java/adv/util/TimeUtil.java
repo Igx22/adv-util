@@ -8,6 +8,9 @@ import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 import java.util.Date;
 
+/**
+ * http://www.journaldev.com/2800/java-8-date-localdate-localdatetime-instant
+ */
 public class TimeUtil {
     public static final DateTimeFormatter FORMATTER_HHMM = DateTimeFormatter.ofPattern("HH:mm");
     public static final DateTimeFormatter FORMATTER_DDMMM_HHMM = DateTimeFormatter.ofPattern("dd.MMM HH:mm");
