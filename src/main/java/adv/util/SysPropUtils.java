@@ -14,7 +14,7 @@ import java.util.Properties;
 public class SysPropUtils {
     private static final Logger log = LoggerFactory.getLogger(SysPropUtils.class);
 
-    public static boolean getBoolean(String propertyName) {
+    public static boolean getBooleanOrFail(String propertyName) {
         String val = System.getProperty(propertyName);
         final boolean result = Boolean.parseBoolean(val);
         log.debug("{}={}", propertyName, result);
@@ -28,7 +28,7 @@ public class SysPropUtils {
         return result;
     }
 
-    public static String getString(String propertyName) {
+    public static String getStringOrFail(String propertyName) {
         String val = System.getProperty(propertyName, null);
         Validate.notNull(val);
         log.debug("{}={}", propertyName, val);
@@ -70,7 +70,7 @@ public class SysPropUtils {
     }
 
     public static boolean isWindows() {
-        return getString("os.name").toLowerCase().startsWith("win");
+        return getStringOrFail("os.name").toLowerCase().startsWith("win");
     }
 
     public static String getEnv(String env) {

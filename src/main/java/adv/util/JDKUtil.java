@@ -63,7 +63,7 @@ public class JDKUtil {
     }
 
     public static double getJavaVersionAsDouble() {
-        return Double.parseDouble(SysPropUtils.getString("java.specification.version"));
+        return Double.parseDouble(SysPropUtils.getStringOrFail("java.specification.version"));
     }
 
     public static String runJStack() {
