@@ -1,11 +1,16 @@
 package adv.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.List;
+import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
 /**
  */
 public class ThreadUtil {
+    private static final Logger log = LoggerFactory.getLogger(ThreadUtil.class);
 
     public static void awaitForTermination(List<Thread> threads, long timeout, TimeUnit timeUnit) {
         try {
@@ -58,6 +63,50 @@ public class ThreadUtil {
                 throw new IllegalStateException(e);
             }
             return false;
+        }
+    }
+
+    /**
+     * @param timeout
+     * @param checkDelay
+     * @param callable
+     * @param <T>
+     * @return null on timeout, value if callable returs smth before timeout expires
+     */
+    public static <T> T awaitNotNullResult(long timeout,
+                                           long checkDelay,
+                                           boolean failOnError,
+                                           Callable<T> callable) {
+        try {
+            T res = null;
+            try {
+                res = callable.call();
+            } catch (Exception e) {
+                if (failOnError) {
+                    throw e;
+                }
+            }
+            if (res != null) {
+                return res;
+            }
+            while (timeout > 0) {
+                log.debug("timeout: {}", timeout);
+                Thread.sleep(checkDelay);
+                timeout -= checkDelay;
+                try {
+                    res = callable.call();
+                } catch (Exception e) {
+                    if (failOnError) {
+                        throw e;
+                    }
+                }
+                if (res != null) {
+                    return res;
+                }
+            }
+            return null;
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
         }
     }
 
