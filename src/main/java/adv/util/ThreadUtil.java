@@ -90,6 +90,9 @@ public class ThreadUtil {
                 return res;
             }
             while (timeout > 0) {
+                if(Thread.currentThread().isInterrupted()) {
+                    throw new InterruptedException();
+                }
                 log.debug("timeout: {}", timeout);
                 Thread.sleep(checkDelay);
                 timeout -= checkDelay;
