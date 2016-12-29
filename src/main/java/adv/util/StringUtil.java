@@ -143,6 +143,10 @@ public class StringUtil {
         return obj == null ? "null" : obj.toString();
     }
 
+    public static String toStringNullSafe(Object obj, String nullValue) {
+        return obj == null ? nullValue : obj.toString();
+    }
+
     public static String trimNullSafe(String s) {
         if (s == null) {
             return "";
