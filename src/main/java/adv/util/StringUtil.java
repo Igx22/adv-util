@@ -11,6 +11,9 @@ import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
 import java.nio.charset.CodingErrorAction;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 
 public class StringUtil {
@@ -238,6 +241,20 @@ seatbid {
             return value;
         }
         return value.replaceAll("[^\\w\\-_\\.a-яA-Я\\(\\)\\[\\]\\s]", "_");
+    }
+
+    public static List<String> safeSplit(String text, String regex) {
+        if (isEmpty(text)) {
+            return Collections.emptyList();
+        }
+        String[] words = text.split(",");
+        List<String> result = new ArrayList(words.length);
+        for (String word : words) {
+            if (!isEmpty(word)) {
+                result.add(word);
+            }
+        }
+        return result;
     }
 }
 
