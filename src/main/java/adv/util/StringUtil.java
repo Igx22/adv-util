@@ -254,6 +254,7 @@ seatbid {
                 result.add(word);
             }
         }
+
         return result;
     }
 }
