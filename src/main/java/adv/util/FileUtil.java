@@ -1,6 +1,7 @@
 package adv.util;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -249,4 +250,51 @@ public class FileUtil {
     }
 
     // FileSystemUtils.copyRecursively(new File(repoExample), importRepoPath.toFile());
+
+    public static File toFile(String relativeFilePath) {
+        String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
+        return new File(path);
+    }
+
+    public static InputStream readFile(String relativeFilePath) {
+        try {
+            Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
+            String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
+            log.debug("readFile(): opening {}", path);
+            InputStream r = new FileInputStream(path);
+            return r;
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void readFile(String relativeFilePath, ConsumerEx<InputStream> callback) {
+        try {
+            Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
+            String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
+            log.debug("readFile(): opening {}", path);
+            try (InputStream r = new BufferedInputStream(new FileInputStream(path))) {
+                callback.accept(r);
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void readFileToBufferedReader(String relativeFilePath, ConsumerEx<BufferedReader> callback) {
+        try {
+            Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
+            String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
+            log.debug("readFileToBufferedReader(): opening {}", path);
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), CharsetUtil.UTF8));
+            Validate.notNull(callback, "Callback is null");
+            callback.accept(br);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public interface ConsumerEx<T> {
+        void accept(T t) throws IOException;
+    }
 }

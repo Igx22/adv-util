@@ -15,7 +15,7 @@
         <project.build.target>1.8</project.build.target>
 
         <junit.version>4.12</junit.version>
-
+        <guava.version>21.0</guava.version>
     </properties>
 
 
@@ -64,6 +64,12 @@
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>${junit.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
 
