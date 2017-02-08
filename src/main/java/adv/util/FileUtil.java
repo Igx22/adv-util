@@ -256,12 +256,10 @@ public class FileUtil {
         return new File(path);
     }
 
-    public static InputStream readFile(String relativeFilePath) {
+    public static InputStream openFile(File f) {
         try {
-            Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
-            String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
-            log.debug("readFile(): opening {}", path);
-            InputStream r = new FileInputStream(path);
+            log.debug("readFile(): opening {}", f.getAbsolutePath());
+            InputStream r = new FileInputStream(f);
             return r;
         } catch (IOException e) {
             throw new IllegalStateException(e);
