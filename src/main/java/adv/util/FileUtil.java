@@ -251,6 +251,11 @@ public class FileUtil {
 
     // FileSystemUtils.copyRecursively(new File(repoExample), importRepoPath.toFile());
 
+    public static File toFile(String baseDir, String relativeFilePath) {
+        String path = baseDir + File.separator + relativeFilePath;
+        return new File(path);
+    }
+
     public static File toFile(String relativeFilePath) {
         String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
         return new File(path);
@@ -280,15 +285,23 @@ public class FileUtil {
     }
 
     public static void readFileToBufferedReader(String relativeFilePath, ConsumerEx<BufferedReader> callback) {
+        BufferedReader br = null;
+        Validate.notNull(callback, "Callback is null");
+        Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
+        String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
+        log.debug("readFileToBufferedReader(): opening {}", path);
         try {
-            Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
-            String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
-            log.debug("readFileToBufferedReader(): opening {}", path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), CharsetUtil.UTF8));
-            Validate.notNull(callback, "Callback is null");
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), CharsetUtil.UTF8));
             callback.accept(br);
         } catch (IOException e) {
             throw new IllegalStateException(e);
+        } finally {
+            if(br!=null) {
+                try {
+                    br.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
     }
 
