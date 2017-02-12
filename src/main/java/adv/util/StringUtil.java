@@ -142,6 +142,10 @@ public class StringUtil {
         return coordinates(new BigDecimal(latitude), new BigDecimal(longitude));
     }
 
+    public static String getNullSafe(String obj) {
+        return obj == null ? "" : obj;
+    }
+
     public static String toStringNullSafe(Object obj) {
         return obj == null ? "null" : obj.toString();
     }
