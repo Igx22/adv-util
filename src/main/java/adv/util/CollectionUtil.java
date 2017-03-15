@@ -11,7 +11,7 @@ public class CollectionUtil {
     }
 
     @SuppressWarnings("unchecked")
-    public static <T> Collection<T> merge(Collection<T> c1, Collection<T> c2) {
+    public static <T> List<T> merge(Collection<T> c1, Collection<T> c2) {
         List list = new ArrayList(c1.size() + c2.size());
         list.addAll(c1);
         list.addAll(c2);
