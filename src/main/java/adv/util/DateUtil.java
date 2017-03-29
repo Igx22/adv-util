@@ -39,7 +39,7 @@ public class DateUtil {
     }
 
     public static void formatShort(final StringBuilder output, final long timestamp) {
-        formatShort(output, timestamp, true);
+        formatShort(output, timestamp, true, true);
     }
 
     public static String formatShort(final LocalDateTime localDateTime) {
@@ -48,7 +48,7 @@ public class DateUtil {
         return localDateTime == null ? "null" : formatShort(timestamp);
     }
 
-    public static void formatShort(final StringBuilder output, final long timestamp, boolean useSpaces) {
+    public static void formatShort(final StringBuilder output, final long timestamp, boolean useSpaces, boolean showMillis) {
         if (timestamp <= 0) {
             output.append("NONE");
             return;
@@ -60,20 +60,29 @@ public class DateUtil {
                 .append(useSpaces ? ' ' : "_")
                 .append(fill2(dt.getHour()))
                 .append(fill2(dt.getMinute()))
-                .append(fill2(dt.getSecond()))
-                .append('.')
-                .append(fill3(dt.get(ChronoField.MILLI_OF_SECOND)));
+                .append(fill2(dt.getSecond()));
+        if(showMillis) {
+            output.append('.')
+                    .append(fill3(dt.get(ChronoField.MILLI_OF_SECOND)));
+        }
+
     }
 
     public static String formatShortNoSpaces(final long timestamp) {
         StringBuilder buf = new StringBuilder(LENGTH);
-        formatShort(buf, timestamp, false);
+        formatShort(buf, timestamp, false, true);
         return buf.toString();
     }
 
     public static String formatShort(final long timestamp) {
         StringBuilder buf = new StringBuilder(LENGTH);
-        formatShort(buf, timestamp, true);
+        formatShort(buf, timestamp, true, true);
+        return buf.toString();
+    }
+
+    public static String formatShortNoMillis(final long timestamp) {
+        StringBuilder buf = new StringBuilder(LENGTH - 4);
+        formatShort(buf, timestamp, true, false);
         return buf.toString();
     }
 
