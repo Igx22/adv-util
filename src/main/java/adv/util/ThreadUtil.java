@@ -90,7 +90,7 @@ public class ThreadUtil {
                 return res;
             }
             while (timeout > 0) {
-                if(Thread.currentThread().isInterrupted()) {
+                if (Thread.currentThread().isInterrupted()) {
                     throw new InterruptedException();
                 }
                 log.debug("timeout: {}", timeout);
@@ -119,6 +119,11 @@ public class ThreadUtil {
         } catch (InterruptedException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    //NOTE: this is slow, use only if needed
+    public String getCallerMethodName() {
+        return Thread.currentThread().getStackTrace()[2].getMethodName();
     }
 
     public interface Check {

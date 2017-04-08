@@ -62,7 +62,8 @@ public class FastLogbackFormatter extends EncoderBase<ILoggingEvent> {
         // Печатаем MDC в виде
         // {value}
         // или {key:value,key:value}
-        final Map contexts = MDC.getCopyOfContextMap();
+
+        final Map contexts = event.getMDCPropertyMap();
         if (contexts != null && contexts.size() > 0) {
             buf.append(" {");
             int count = 0;
