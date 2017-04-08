@@ -3,15 +3,18 @@ package adv.util;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
+import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 /**
  * http://www.journaldev.com/2800/java-8-date-localdate-localdatetime-instant
  */
 public class TimeUtil {
+    public static final DateTimeFormatter FORMATTER_YYYY_MM_DD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter FORMATTER_HHMM = DateTimeFormatter.ofPattern("HH:mm");
     public static final DateTimeFormatter FORMATTER_DDMMM_HHMM = DateTimeFormatter.ofPattern("dd.MMM HH:mm");
     public static final DateTimeFormatter FORMATTER_DDMMYYYY = DateTimeFormatter.ofPattern("dd.MM.yyyy");
