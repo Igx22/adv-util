@@ -1006,4 +1006,8 @@ public class BitUtil {
         }
         return true;
     }
+
+    public static boolean between(int value, int minInclusive, int maxExclusive) {
+        return value >= minInclusive && value < maxExclusive;
+    }
 }
