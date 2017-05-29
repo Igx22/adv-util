@@ -1,11 +1,13 @@
 package adv.util;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
 import java.nio.charset.Charset;
+import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
@@ -48,6 +50,38 @@ public class ZipUtil {
                 out = new ZipOutputStream(target, CharsetUtil.CP866);
                 out.putNextEntry(new ZipEntry(entryName));
                 StreamUtils.copyStream(sourceBytes, out);
+            } finally {
+                if (out != null) {
+                    try {
+                        out.closeEntry();
+                    } catch (IOException ignored) {
+                    }
+                }
+                if (out != null) {
+                    try {
+                        out.close();
+                    } catch (IOException ignored) {
+                    }
+                }
+            }
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    public static void writeZip(List<Pair<String, byte[]>> files, OutputStream target) {
+        try {
+            ZipOutputStream out = null;
+            try {
+                for (Pair<String, byte[]> file : files) {
+                    String fileName = file.getLeft();
+                    byte[] data = file.getRight();
+                    out = new ZipOutputStream(target, CharsetUtil.CP866);
+                    String entryName = StringUtil.removeZipIncompatibleChars(fileName);
+                    log.debug("creating archive entry: '{}' cleared to => '{}'", fileName, entryName);
+                    out.putNextEntry(new ZipEntry(entryName));
+                    out.write(data);
+                }
             } finally {
                 if (out != null) {
                     try {
