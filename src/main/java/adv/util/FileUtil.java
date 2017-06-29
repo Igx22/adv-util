@@ -284,14 +284,15 @@ public class FileUtil {
         }
     }
 
-    public static void readFileToBufferedReader(String relativeFilePath, ConsumerEx<BufferedReader> callback) {
+    public static void readFileToBufferedReader(String filePath, ConsumerEx<BufferedReader> callback) {
         BufferedReader br = null;
         Validate.notNull(callback, "Callback is null");
-        Validate.isTrue(!relativeFilePath.startsWith(File.separator), "path %s should be relative", relativeFilePath);
-        String path = System.getProperty("user.dir") + File.separator + relativeFilePath;
-        log.debug("readFileToBufferedReader(): opening {}", path);
+        if(!filePath.startsWith(File.separator)) {
+            filePath =  System.getProperty("user.dir") + File.separator + filePath;
+        }
+        log.debug("readFileToBufferedReader(): opening {}", filePath);
         try {
-            br = new BufferedReader(new InputStreamReader(new FileInputStream(path), CharsetUtil.UTF8));
+            br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), CharsetUtil.UTF8));
             callback.accept(br);
         } catch (IOException e) {
             throw new IllegalStateException(e);
