@@ -1,8 +1,6 @@
 package adv.util.plainsocket;
 
 
-import adv.util.SysPropUtils;
-
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -14,7 +12,7 @@ import java.util.Scanner;
 
 /**
  * для тестов
- *
+ * <p>
  * -отдельный поток для установления соединения
  * -отдельный поток на каждое клиентское соединение
  * -принимаем все входящие соединения и печатаем то что нам шлют в system.out
@@ -34,6 +32,7 @@ public class DummyServer extends Thread {
     public DummyServer(int port, String interfaceHost) {
         this.port = port;
         this.interfaceHost = interfaceHost;
+        System.out.printf("using iface: %s port: %d \n", interfaceHost, port);
     }
 
 
@@ -90,9 +89,9 @@ public class DummyServer extends Thread {
 
     public static void main(String args[]) throws IOException, InterruptedException {
         System.out.println(">starting server");
-        DummyServer server = new DummyServer(
-                SysPropUtils.getUnsignedInteger("DummyServer.port", 10051),
-                SysPropUtils.getString("DummyServer.interfaceHost", "localhost"));
+        Integer port = Integer.getInteger("DummyServer.port", 10051);
+        String iface = System.getProperties().getProperty("DummyServer.interfaceHost", "localhost");
+        DummyServer server = new DummyServer(port, iface);
         server.init();
         System.out.println(">press <enter> to stop");
         new Scanner(System.in).nextLine();

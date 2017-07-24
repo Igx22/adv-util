@@ -50,7 +50,8 @@ public class DummyClient {
     }
 
     public static void main(String[] args) throws IOException, InterruptedException {
-        DummyClient client = new DummyClient("localhost", 1000);
+        Integer port = Integer.getInteger("DummyClient.port", 9999);
+        DummyClient client = new DummyClient("localhost", port);
         client.init();
         client.writeAndFlush(new byte[]{(byte) 0xAA, 0x01, (byte) 0xAB, 0x14, 0x44, 0x22, (byte) 0xC0, 0x03, 0x00, 0x6F, 0x0D, 0x00,
                 0x0A, 0x01, 0x00, 0x00, 0x02, 0x00, (byte) 0xF8, (byte) 0x9A, (byte) 0x89, 0x2F, 0x13, 0x03, 0x4C});
