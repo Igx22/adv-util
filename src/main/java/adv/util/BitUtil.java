@@ -1010,4 +1010,14 @@ public class BitUtil {
     public static boolean between(int value, int minInclusive, int maxExclusive) {
         return value >= minInclusive && value < maxExclusive;
     }
+
+    public static boolean probably(Random rnd, int percentValueForTrue) {
+        Validate.isTrue(percentValueForTrue >= 0 && percentValueForTrue <= 100);
+        int value = rnd.nextInt(100);
+        return between(value, 0, percentValueForTrue);
+    }
+
+    public static <T> T getRandomItem(Random rnd, List<T> list) {
+        return list.get(rnd.nextInt(list.size()));
+    }
 }
