@@ -1018,6 +1018,7 @@ public class BitUtil {
     }
 
     public static <T> T getRandomItem(Random rnd, List<T> list) {
+        Validate.isTrue(list.size() > 0, "list is empty");
         return list.get(rnd.nextInt(list.size()));
     }
 }
