@@ -99,4 +99,20 @@ public class ReflectionUtil {
             throw new IllegalStateException(e);
         }
     }
+
+    public static Class subClass(String parentClassName, String prototypeClassName, String newSubclassName) {
+        try {
+            if (log.isDebugEnabled()) {
+                log.debug("subClass(): parentClassName: {}, dstClass: {}", parentClassName, prototypeClassName);
+            }
+            CtClass parentClazz = ClassPool.getDefault().get(parentClassName);
+            parentClazz.setModifiers(parentClazz.getModifiers() & ~Modifier.FINAL);
+            CtClass prototypeClazz = ClassPool.getDefault().get(prototypeClassName);
+            prototypeClazz.setName(newSubclassName);
+            prototypeClazz.setSuperclass(parentClazz);
+            return prototypeClazz.toClass();
+        } catch (NotFoundException | CannotCompileException e) {
+            throw new IllegalStateException(e);
+        }
+    }
 }
