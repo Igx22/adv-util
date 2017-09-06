@@ -16,7 +16,7 @@ public class JDKUtil {
     private static File JSTACK_FILE;
     private static Integer jvmPid;
 
-    private static synchronized Integer getJvmPID() {
+    public static synchronized Integer getJvmPID() {
         if (jvmPid != null) {
             return jvmPid;
         }
