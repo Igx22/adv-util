@@ -68,17 +68,17 @@ public class DiskSerializer {
     }
 
     public synchronized void read(ReaderCallback reader) {
-        log.info("reading file: {}", storageFile.getAbsolutePath());
+        log.debug("reading file: {}", storageFile.getAbsolutePath());
         StopWatch clock = new StopWatch();
         InputStream is = null;
         try {
             clock.start();
             if (!storageFile.exists()) {
-                log.info("missing file {}", storageFile);
+                log.debug("missing file {}", storageFile);
             } else {
                 is = new BufferedInputStream(new FileInputStream(storageFile), FILE_BUFFER_SIZE);
                 reader.read(is);
-                log.info("reading {} Kib from file: {} time: {}s",
+                log.debug("reading {} Kib from file: {} time: {}s",
                         String.format("%3.1f", storageFile.length() / 1024.0), storageFile.getAbsolutePath(),
                         String.format("%3.3f", clock.getTime() / 1000.0));
             }
@@ -118,7 +118,7 @@ public class DiskSerializer {
             clock.start();
             os = new BufferedOutputStream(new FileOutputStream(f), FILE_BUFFER_SIZE);
             writerCallback.write(os);
-            log.info("writing {} Kib to file: {} time: {}s",
+            log.debug("writing {} Kib to file: {} time: {}s",
                     String.format("%3.1f", f.length() / 1024.0), f.getAbsolutePath(),
                     String.format("%3.3f", clock.getTime() / 1000.0));
         } catch (Exception e) {
