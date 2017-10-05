@@ -1,9 +1,7 @@
 package adv.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CollectionUtil {
     public static <T> Iterable<T> emptyIfNull(Iterable<T> iterable) {
@@ -17,4 +15,12 @@ public class CollectionUtil {
         list.addAll(c2);
         return list;
     }
+
+    public static <K, V> Map<K, V> sortMapByKey(Map<K, V> map, Comparator<? super K> keyComparator) {
+        return map.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey(keyComparator))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    }
+
 }

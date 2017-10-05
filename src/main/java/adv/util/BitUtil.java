@@ -1204,4 +1204,21 @@ public class BitUtil {
         }
         return value | (rb << i);
     }
+
+    public static String bitSetToBitmaskStr(BitSet bitSet, int significatBits) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < significatBits; i++) {
+            sb.append(bitSet.get(i) ? '1' : '0');
+        }
+        return sb.toString();
+    }
+
+    public static String bitSetToString(BitSet bitSet) {
+        if (bitSet.isEmpty()) {
+            return "{}";
+        }
+        return bitSet.toString();
+    }
+
+
 }
