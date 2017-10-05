@@ -23,4 +23,11 @@ public class CollectionUtil {
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
+    public static <K extends Comparable<? super K>, V> Map<K, V> sortMapByKey(Map<K, V> map) {
+        return map.entrySet().stream()
+                .sorted(Map.Entry.comparingByKey())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+    }
+
 }
