@@ -33,22 +33,11 @@ public class CollectionUtil {
                         (oldValue, newValue) -> oldValue, LinkedHashMap::new));
     }
 
-    private static <T> Stream<T> cartesian(BinaryOperator<T> aggregator,
+    public static <T> Stream<T> cartesian(BinaryOperator<T> aggregator,
                                            Supplier<Stream<T>>... streams) {
         return Arrays.stream(streams)
                 .reduce((s1, s2) ->
                         () -> s1.get().flatMap(t1 -> s2.get().map(t2 -> aggregator.apply(t1, t2))))
                 .orElse(Stream::empty).get();
     }
-
-    public static void main(String[] args) {
-        Stream<String> result = cartesian(
-                (a, b) -> a + b,
-                () -> Stream.of("A", "B"),
-                () -> Stream.of("K", "L"),
-                () -> Stream.of("X", "Y")
-        );
-        result.forEach(System.out::println);
-    }
-
 }
