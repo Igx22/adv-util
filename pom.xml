@@ -9,10 +9,10 @@
     <packaging>jar</packaging>
 
     <properties>
-        <java.version>1.8</java.version>
+        <java.version>1.9</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.build.source>1.8</project.build.source>
-        <project.build.target>1.8</project.build.target>
+        <project.build.source>1.9</project.build.source>
+        <project.build.target>1.9</project.build.target>
 
         <junit.version>4.12</junit.version>
         <guava.version>21.0</guava.version>
