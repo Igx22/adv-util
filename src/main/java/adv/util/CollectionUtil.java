@@ -11,6 +11,12 @@ public class CollectionUtil {
         return iterable == null ? Collections.<T>emptyList() : iterable;
     }
 
+    public static <T> List<T> setToList(Set<T> set) {
+        List<T> list = new ArrayList<>(set.size());
+        list.addAll(set);
+        return list;
+    }
+
     @SuppressWarnings("unchecked")
     public static <T> List<T> merge(Collection<T> c1, Collection<T> c2) {
         List list = new ArrayList(c1.size() + c2.size());
@@ -34,7 +40,7 @@ public class CollectionUtil {
     }
 
     public static <T> Stream<T> cartesian(BinaryOperator<T> aggregator,
-                                           Supplier<Stream<T>>... streams) {
+                                          Supplier<Stream<T>>... streams) {
         return Arrays.stream(streams)
                 .reduce((s1, s2) ->
                         () -> s1.get().flatMap(t1 -> s2.get().map(t2 -> aggregator.apply(t1, t2))))
