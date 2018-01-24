@@ -1220,5 +1220,26 @@ public class BitUtil {
         return bitSet.toString();
     }
 
+    public static long setNLowerBits(int numberOfEnabledBits) {
+        Check.isTrue(numberOfEnabledBits >= 1 && numberOfEnabledBits <= 64);
+        // ставим N-й бит в 1 (ex: 0b0001000)
+        long mask = (1 << (numberOfEnabledBits - 1));
+        // размножаем N-й бит вправо (ex: 0b0001111)
+        mask = mask | (mask - 1);
+        return mask;
+    }
+
+    public static long writeLowerBitsAndShift(long storage, int payload, int payloadBitSize) {
+        // выделяем место
+        storage = storage << payloadBitSize;
+        // копируем биты из payload в storage
+        storage = storage | (payload & setNLowerBits(payloadBitSize));
+        return storage;
+    }
+
+    public static int readLowerBits(long storage, int payloadBitSize) {
+        long result = storage & setNLowerBits(payloadBitSize);
+        return (int)result;
+    }
 
 }
