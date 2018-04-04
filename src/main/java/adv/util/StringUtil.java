@@ -261,6 +261,16 @@ seatbid {
 
         return result;
     }
+
+    public static String getFirstCommaSeparatedValue(String value) {
+        if(value!=null && value.contains(",")) {
+            String[] arr = value.split(",");
+            if(arr.length>=1) {
+                value = arr[0];
+            }
+        }
+        return value;
+    }
 }
 
 
