@@ -46,4 +46,11 @@ public class CollectionUtil {
                         () -> s1.get().flatMap(t1 -> s2.get().map(t2 -> aggregator.apply(t1, t2))))
                 .orElse(Stream::empty).get();
     }
+
+    public static int[] toIntArray(List<Integer> list){
+        int[] ret = new int[list.size()];
+        for(int i = 0;i < ret.length;i++)
+            ret[i] = list.get(i);
+        return ret;
+    }
 }
