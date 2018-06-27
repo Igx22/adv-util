@@ -10,6 +10,17 @@ public class IpUtil {
         return InetAddresses.coerceToInteger(InetAddresses.forString(ipv4));
     }
 
+    public static String ipv4ToString(Long ipv4) {
+        if (ipv4 == null) {
+            return "";
+        }
+        return ipv4ToString((int) ipv4.longValue() & 0xFFFFFFFF);
+    }
+
+    public static String ipv4ToString(int ipv4) {
+        return InetAddresses.toAddrString(InetAddresses.fromInteger(ipv4));
+    }
+
     public static String depersonalizeIpv4String(String ipv4) {
         String[] split = ipv4.split("\\.");
         split[3] = "0";
