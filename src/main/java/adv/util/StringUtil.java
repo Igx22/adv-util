@@ -263,13 +263,28 @@ seatbid {
     }
 
     public static String getFirstCommaSeparatedValue(String value) {
-        if(value!=null && value.contains(",")) {
+        if (value != null && value.contains(",")) {
             String[] arr = value.split(",");
-            if(arr.length>=1) {
+            if (arr.length >= 1) {
                 value = arr[0];
             }
         }
         return value;
+    }
+
+    public static String getFirstNWords(String text, int lengthInChars) {
+        if (lengthInChars <= 0) {
+            return "";
+        }
+        String[] words = text.split("\\s+");
+        StringBuilder result = new StringBuilder(text.length());
+        for (int i = 0; i < words.length && result.length() + 1 < lengthInChars; i++) {
+            if (i > 0) {
+                result.append(" ");
+            }
+            result.append(words[i]);
+        }
+        return result.toString();
     }
 }
 
