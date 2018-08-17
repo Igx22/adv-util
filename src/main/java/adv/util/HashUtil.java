@@ -6,6 +6,9 @@ import java.security.NoSuchAlgorithmException;
 public class HashUtil {
 
     public static String md5(String input) {
+        if (StringUtil.isEmpty(input)) {
+            return "";
+        }
         try {
             MessageDigest md = MessageDigest.getInstance("MD5");
             md.update(input.getBytes());
