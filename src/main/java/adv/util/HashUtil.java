@@ -18,4 +18,16 @@ public class HashUtil {
             throw new IllegalStateException(e);
         }
     }
+
+    static long LargestPrime48 = 281474976710597L;
+
+
+    // https://stackoverflow.com/questions/32912894/how-to-shorten-a-64-bit-hash-value-down-to-a-48-bit-value?noredirect=1&lq=1
+    public static long hash48(String input) {
+        byte[] data = input.getBytes(CharsetUtil.UTF8);
+        long crc64 = Crc64.update(0, data, 0, data.length);
+        long hash48 = crc64 % LargestPrime48;
+        Check.isTrue((hash48 & 0xFFFFFF) == 0);
+        return hash48;
+    }
 }
