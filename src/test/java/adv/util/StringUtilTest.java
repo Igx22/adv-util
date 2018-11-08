@@ -2,6 +2,7 @@ package adv.util;
 
 import org.junit.Test;
 
+import static adv.util.StringUtil.fixBrokenUTF16Surrogates;
 import static adv.util.StringUtil.getFirstNWords;
 import static org.junit.Assert.assertEquals;
 
@@ -33,5 +34,24 @@ public class StringUtilTest {
         for (int i = 0; i < sample2.length(); i++) {
             System.out.println(i + " " + getFirstNWords(sample2, i));
         }
+    }
+
+    @Test
+    public void testFixSurrogates() {
+        assertEquals("\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uD83D\uDCB0", true));
+        assertEquals("", fixBrokenUTF16Surrogates("\uD83D", true));
+        assertEquals("", fixBrokenUTF16Surrogates("\uDCB0", true));
+        assertEquals("\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uD83D\uDCB0\uDCB0", true));
+        assertEquals("\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uDCB0\uD83D\uDCB0", true));
+        assertEquals("\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uD83D\uDCB0\uD83D", true));
+        assertEquals("\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uD83D\uD83D\uDCB0", true));
+
+        assertEquals("\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uD83D\uDCB0", false));
+        assertEquals("�", fixBrokenUTF16Surrogates("\uD83D", false));
+        assertEquals("�", fixBrokenUTF16Surrogates("\uDCB0", false));
+        assertEquals("\uD83D\uDCB0�", fixBrokenUTF16Surrogates("\uD83D\uDCB0\uDCB0", false));
+        assertEquals("�\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uDCB0\uD83D\uDCB0", false));
+        assertEquals("\uD83D\uDCB0�", fixBrokenUTF16Surrogates("\uD83D\uDCB0\uD83D", false));
+        assertEquals("�\uD83D\uDCB0", fixBrokenUTF16Surrogates("\uD83D\uD83D\uDCB0", false));
     }
 }

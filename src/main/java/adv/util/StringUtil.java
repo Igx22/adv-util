@@ -7,10 +7,7 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.charset.CharacterCodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-import java.nio.charset.CodingErrorAction;
+import java.nio.charset.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -285,6 +282,48 @@ seatbid {
             result.append(words[i]);
         }
         return result.toString();
+    }
+
+    /**
+     * Удаляет из строки неполные суррогатные пары для совместимости с UTF-8
+     * <p>
+     * Пример суррогатного символа:
+     * <ul>
+     * <li>Character: 💰
+     * <li>Unicode: U+1F4B0
+     * <li>UTF-16: \uD83D\uDCB0
+     * <li>UTF-8: F0 9F 92 B0
+     * </ul>
+     * <p>
+     * Использование в строке (например JSON) только первой или только второй половины из суррогатной пары 0xD83D, 0xDCB0
+     * может ломать парсинг на некторых клиентах (например, PHP).
+     *
+     * @param remove true - удаляет суррогат, иначе заменяет на �
+     */
+    public static String fixBrokenUTF16Surrogates(String s, boolean remove) {
+        if (StringUtil.isEmptyOrSpaces(s)) return s;
+
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < s.length(); i++) {
+            char c = s.charAt(i);
+            if (Character.isHighSurrogate(c)) {
+                if (i == s.length() - 1 || !Character.isLowSurrogate(s.charAt(i + 1))) {
+                    if (!remove) {
+                        sb.append('\uFFFD');
+                    }
+                    continue;
+                }
+            } else if (Character.isLowSurrogate(c)) {
+                if (i == 0 || !Character.isHighSurrogate(s.charAt(i - 1))) {
+                    if (!remove) {
+                        sb.append('\uFFFD');
+                    }
+                    continue;
+                }
+            }
+            sb.append(c);
+        }
+        return sb.toString();
     }
 }
 
