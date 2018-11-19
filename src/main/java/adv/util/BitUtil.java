@@ -1242,4 +1242,34 @@ public class BitUtil {
         return (int)result;
     }
 
+    /**
+     * Get an integer bit mask consisting of 1 bits in the given range.  The returned {@code int}
+     * will have bits {@code low} through {@code high} set, and all other bits clear.
+     *
+     * @param low the low bit value
+     * @param high the high bit value
+     * @return the bit mask
+     */
+    public static int intBitMask(int low, int high) {
+        assert low >= 0;
+        assert low <= high;
+        assert high < 32;
+        return (high == 31 ? 0 : (1 << high + 1)) - (1 << low);
+    }
+
+    /**
+     * Get a long bit mask consisting of 1 bits in the given range.  The returned {@code long}
+     * will have bits {@code low} through {@code high} set, and all other bits clear.
+     *
+     * @param low the low bit value
+     * @param high the high bit value
+     * @return the bit mask
+     */
+    public static long longBitMask(int low, int high) {
+        assert low >= 0;
+        assert low <= high;
+        assert high < 64;
+        return (high == 63 ? 0L : (1L << (long) high + 1L)) - (1L << (long) low);
+    }
+
 }
