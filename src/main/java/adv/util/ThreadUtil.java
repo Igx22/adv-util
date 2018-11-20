@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  */
@@ -128,5 +129,28 @@ public class ThreadUtil {
 
     public interface Check {
         boolean isReady();
+    }
+
+    // https://www.elastic.co/blog/we-are-out-of-memory-systemd-process-limits
+    public static void countMaxThreadsBeforeOom() {
+        AtomicInteger count = new AtomicInteger(0);
+        for (; ; ) {
+            new Thread(new Runnable() {
+                public void run() {
+                    System.err.println("New thread #" + count.incrementAndGet());
+                    for (; ; ) {
+                        try {
+                            Thread.sleep(1000);
+                        } catch (Exception e) {
+                            System.err.println(e);
+                        }
+                    }
+                }
+            }).start();
+        }
+    }
+
+    public static void main(String[] args) {
+        countMaxThreadsBeforeOom();
     }
 }
