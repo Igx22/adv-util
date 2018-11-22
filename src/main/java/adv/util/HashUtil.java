@@ -1,5 +1,9 @@
 package adv.util;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -23,11 +27,22 @@ public class HashUtil {
 
 
     // https://stackoverflow.com/questions/32912894/how-to-shorten-a-64-bit-hash-value-down-to-a-48-bit-value?noredirect=1&lq=1
+    public static long hash32(String input) {
+        HashFunction hf = Hashing.murmur3_32();
+        HashCode hc = hf.newHasher().putString(input, CharsetUtil.UTF8).hash();
+        long hash32 = hc.asInt() & 0xFFFFFFFFL;
+        return hash32;
+    }
+
+
     public static long hash48(String input) {
-        byte[] data = input.getBytes(CharsetUtil.UTF8);
-        long crc64 = Crc64.update(0, data, 0, data.length);
-        long hash48 = crc64 % LargestPrime48;
-        Check.isTrue((hash48 & 0xFFFFFF) == 0);
+        HashFunction hf = Hashing.murmur3_128();
+        HashCode hc = hf.newHasher().putString(input, CharsetUtil.UTF8).hash();
+        byte[] data = hc.asBytes();
+        long low = BitUtil.readBELong(data, 0);
+        long high = BitUtil.readBELong(data, 8);
+        long hash64 = low ^ high;
+        long hash48 = hash64 % LargestPrime48;
         return hash48;
     }
 }
