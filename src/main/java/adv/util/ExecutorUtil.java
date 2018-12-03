@@ -1,12 +1,11 @@
 package adv.util;
 
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ThreadFactory;
+import java.util.List;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class ExecutorUtil {
@@ -18,6 +17,11 @@ public class ExecutorUtil {
 
     public static ExecutorService newFixedThreadPool(String threadName, int size) {
         return Executors.newFixedThreadPool(size, new NamedThreadFactory(threadName));
+    }
+
+    public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds) {
+        return new ThreadPoolExecutor(coreSize, maxSize, timeoutSeconds, TimeUnit.SECONDS,
+                new SynchronousQueue<Runnable>(), new NamedThreadFactory(threadName));
     }
 
     public static ScheduledExecutorService newScheduledThreadPool(String threadName, int size) {
@@ -63,6 +67,39 @@ public class ExecutorUtil {
         @Override
         public void uncaughtException(Thread t, Throwable e) {
             log.error("Exception in thread \"{}\"", t.getName(), e);
+        }
+    }
+
+    public static class CurrentThreadExecutor extends AbstractExecutorService {
+
+        @Override
+        public void shutdown() {
+
+        }
+
+        @NotNull
+        @Override
+        public List<Runnable> shutdownNow() {
+            return null;
+        }
+
+        @Override
+        public boolean isShutdown() {
+            return false;
+        }
+
+        @Override
+        public boolean isTerminated() {
+            return false;
+        }
+
+        @Override
+        public boolean awaitTermination(long timeout, @NotNull TimeUnit unit) throws InterruptedException {
+            return false;
+        }
+
+        public void execute(Runnable r) {
+            r.run();
         }
     }
 }
