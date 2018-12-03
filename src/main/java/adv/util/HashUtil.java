@@ -42,7 +42,9 @@ public class HashUtil {
         long low = BitUtil.readBELong(data, 0);
         long high = BitUtil.readBELong(data, 8);
         long hash64 = low ^ high;
-        long hash48 = hash64 % LargestPrime48;
+        // поскольку хеш считаем равномерным, мы тупо берем 6*8=48бит младших
+        // альтернатива - mod
+        long hash48 = hash64 & 0xFFFFFFFFFFFFL;
         return hash48;
     }
 }
