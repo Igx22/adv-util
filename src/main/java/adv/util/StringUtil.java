@@ -304,7 +304,7 @@ seatbid {
         if (StringUtil.isEmptyOrSpaces(s)) return s;
 
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < s.length(); i++) {
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
             if (Character.isHighSurrogate(c)) {
                 if (i == s.length() - 1 || !Character.isLowSurrogate(s.charAt(i + 1))) {
@@ -324,6 +324,10 @@ seatbid {
             sb.append(c);
         }
         return sb.toString();
+    }
+
+    public static String toStringNullSafe(Integer value) {
+        return value == null ? "" : Integer.toString(value);
     }
 }
 
