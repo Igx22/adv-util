@@ -23,6 +23,7 @@ public class IpUtil {
 
     public static String depersonalizeIpv4String(String ipv4) {
         String[] split = ipv4.split("\\.");
+        Check.isTrue(split.length == 4, "Invalid IPv4 address");
         split[3] = "0";
         return split[0] + "." + split[1] + "." + split[2] + "." + split[3];
     }
