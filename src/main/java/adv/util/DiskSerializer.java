@@ -1,5 +1,6 @@
 package adv.util;
 
+import com.google.common.io.CountingOutputStream;
 import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,11 +57,17 @@ public class DiskSerializer {
 
     public synchronized void write(WriterCallback writerCallback) {
         File tempFile = new File(storageDir, storageFile.getName() + "." + System.currentTimeMillis());
-        doSave(writerCallback, tempFile);
-
+        int bytesWritten = doSave(writerCallback, tempFile);
         if (storageFile.isFile() && storageFile.exists()) {
-            File archiveFile = new File(storageDir, storageFile.getName() + "." + DateUtil.formatShortNoSpaces(System.currentTimeMillis()));
-            FileUtil.safeRename(storageFile, archiveFile, FILE_OP_RETRY_COUNT, FILE_OP_RETRY_DELAY, TimeUnit.MILLISECONDS);
+            long fileLength = tempFile.length();
+            if (fileLength != bytesWritten) {
+                throw new IllegalStateException(
+                        String.format("failed write, file %s, expected %d b actual %d b",
+                                bytesWritten, bytesWritten, fileLength));
+            } else {
+                File archiveFile = new File(storageDir, storageFile.getName() + "." + DateUtil.formatShortNoSpaces(System.currentTimeMillis()));
+                FileUtil.safeRename(storageFile, archiveFile, FILE_OP_RETRY_COUNT, FILE_OP_RETRY_DELAY, TimeUnit.MILLISECONDS);
+            }
         }
         FileUtil.safeRename(tempFile, storageFile, FILE_OP_RETRY_COUNT, FILE_OP_RETRY_DELAY, TimeUnit.MILLISECONDS);
         // удаляем архивы, которые старше заданного периода
@@ -111,18 +118,19 @@ public class DiskSerializer {
     }
 
     // сохраняем данные
-    private void doSave(WriterCallback writerCallback, File f) {
+    private int doSave(WriterCallback writerCallback, File f) {
         StopWatch clock = new StopWatch();
-        OutputStream os = null;
+        CountingOutputStream os = null;
         try {
             clock.start();
-            os = new BufferedOutputStream(new FileOutputStream(f), FILE_BUFFER_SIZE);
+            os = new CountingOutputStream(new BufferedOutputStream(new FileOutputStream(f), FILE_BUFFER_SIZE));
             writerCallback.write(os);
             log.debug("writing {} Kib to file: {} time: {}s",
                     String.format("%3.1f", f.length() / 1024.0), f.getAbsolutePath(),
                     String.format("%3.3f", clock.getTime() / 1000.0));
         } catch (Exception e) {
             log.error("Failed to save file: {}", f, e);
+            return -1;
         } finally {
             if (os != null) {
                 try {
@@ -131,6 +139,7 @@ public class DiskSerializer {
                 }
             }
         }
+        return (int) os.getCount();
     }
 
     public interface WriterCallback {
