@@ -150,6 +150,17 @@ public class ThreadUtil {
         }
     }
 
+    /**
+     * @param deadline время до которого работаем
+     * @return true, если дедлайн наступил
+     */
+    public static boolean checkDeadline(long deadline) {
+        if (deadline <= 0) {
+            return false;
+        }
+        return System.currentTimeMillis() > deadline;
+    }
+
     public static void main(String[] args) {
         countMaxThreadsBeforeOom();
     }

@@ -15,8 +15,17 @@ public class ExecutorUtil {
         return Executors.newCachedThreadPool(new NamedThreadFactory(threadName));
     }
 
-    public static ExecutorService newFixedThreadPool(String threadName, int size) {
-        return Executors.newFixedThreadPool(size, new NamedThreadFactory(threadName));
+    // фиксированного размера пул, бесконечная очередь задач
+    public static ExecutorService newFixedThreadPoolWithUnlimitedQueue(String threadName, int threadCount) {
+        return new ThreadPoolExecutor(threadCount, threadCount, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                new NamedThreadFactory(threadName));
+    }
+
+    public static ExecutorService newFixedThreadPoolWithLimitedQueue(String threadName, int threadCount, int queueSize) {
+        return new ThreadPoolExecutor(threadCount, threadCount, 0L, TimeUnit.MILLISECONDS,
+                new ArrayBlockingQueue<>(queueSize),
+                new NamedThreadFactory(threadName));
     }
 
     public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds) {
@@ -102,4 +111,5 @@ public class ExecutorUtil {
             r.run();
         }
     }
+
 }
