@@ -28,6 +28,10 @@ public class ExecutorUtil {
                 new NamedThreadFactory(threadName));
     }
 
+    public static ExecutorService newFixedThreadPool(String threadName, int size) {
+        return Executors.newFixedThreadPool(size, new NamedThreadFactory(threadName));
+    }
+
     public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds) {
         return new ThreadPoolExecutor(coreSize, maxSize, timeoutSeconds, TimeUnit.SECONDS,
                 new SynchronousQueue<Runnable>(), new NamedThreadFactory(threadName));
@@ -109,6 +113,44 @@ public class ExecutorUtil {
 
         public void execute(Runnable r) {
             r.run();
+        }
+    }
+
+    public class MeteredExecutor extends ThreadPoolExecutor {
+
+
+        public MeteredExecutor(int corePoolSize,
+                               int maximumPoolSize,
+                               long keepAliveTime,
+                               TimeUnit unit,
+                               BlockingQueue<Runnable> workQueue,
+                               ThreadFactory threadFactory) {
+            super(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue, threadFactory);
+        }
+
+        @Override
+        public int getActiveCount() {
+            return super.getActiveCount();
+        }
+
+        @Override
+        public int getLargestPoolSize() {
+            return super.getLargestPoolSize();
+        }
+
+        @Override
+        public long getCompletedTaskCount() {
+            return super.getCompletedTaskCount();
+        }
+
+        @Override
+        public long getTaskCount() {
+            return super.getTaskCount();
+        }
+
+        @Override
+        public BlockingQueue<Runnable> getQueue() {
+            return super.getQueue();
         }
     }
 
