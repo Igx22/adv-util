@@ -32,9 +32,9 @@ public class ExecutorUtil {
         return Executors.newFixedThreadPool(size, new NamedThreadFactory(threadName));
     }
 
-    public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds) {
+    public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds, Thread.UncaughtExceptionHandler handler) {
         return new ThreadPoolExecutor(coreSize, maxSize, timeoutSeconds, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(), new NamedThreadFactory(threadName));
+                new SynchronousQueue<Runnable>(), new NamedThreadFactory(threadName, handler));
     }
 
     public static ScheduledExecutorService newScheduledThreadPool(String threadName, int size) {
@@ -55,7 +55,7 @@ public class ExecutorUtil {
 
     public static Thread newThread(String name, Runnable r) {
         Thread t = new Thread(r);
-        t.setUncaughtExceptionHandler(new NamedThreadFactory(null));
+        t.setUncaughtExceptionHandler(new NamedThreadFactory(null, null));
         t.setName(name);
         return t;
     }
@@ -64,9 +64,16 @@ public class ExecutorUtil {
     public static class NamedThreadFactory implements ThreadFactory, Thread.UncaughtExceptionHandler {
         private String threadName;
         private AtomicLong threadId = new AtomicLong(0);
+        private final Thread.UncaughtExceptionHandler exceptionHandler;
+
+        public NamedThreadFactory(String threadName, Thread.UncaughtExceptionHandler exceptionHandler) {
+            this.threadName = threadName;
+            this.exceptionHandler = exceptionHandler;
+        }
 
         public NamedThreadFactory(String threadName) {
             this.threadName = threadName;
+            this.exceptionHandler = null;
         }
 
         @Override
@@ -79,7 +86,11 @@ public class ExecutorUtil {
 
         @Override
         public void uncaughtException(Thread t, Throwable e) {
-            log.error("Exception in thread \"{}\"", t.getName(), e);
+            if (exceptionHandler != null) {
+                exceptionHandler.uncaughtException(t, e);
+            } else {
+                log.error("Exception in thread \"{}\"", t.getName(), e);
+            }
         }
     }
 
