@@ -32,9 +32,19 @@ public class ExecutorUtil {
         return Executors.newFixedThreadPool(size, new NamedThreadFactory(threadName));
     }
 
+
     public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds, Thread.UncaughtExceptionHandler handler) {
         return new ThreadPoolExecutor(coreSize, maxSize, timeoutSeconds, TimeUnit.SECONDS,
-                new SynchronousQueue<Runnable>(), new NamedThreadFactory(threadName, handler));
+                new SynchronousQueue<Runnable>(),
+                new NamedThreadFactory(threadName, handler),
+                new RejectedExecutionLogger());
+    }
+
+    public static ExecutorService newCachedThreadPool(String threadName, int coreSize, int maxSize, int timeoutSeconds) {
+        return new ThreadPoolExecutor(coreSize, maxSize, timeoutSeconds, TimeUnit.SECONDS,
+                new SynchronousQueue<Runnable>(),
+                new NamedThreadFactory(threadName),
+                new RejectedExecutionLogger());
     }
 
     public static ScheduledExecutorService newScheduledThreadPool(String threadName, int size) {
@@ -124,6 +134,13 @@ public class ExecutorUtil {
 
         public void execute(Runnable r) {
             r.run();
+        }
+    }
+
+    private static class RejectedExecutionLogger implements RejectedExecutionHandler {
+        @Override
+        public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+            log.error("executor: rejected task from pool {}", executor);
         }
     }
 
