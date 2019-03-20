@@ -58,6 +58,18 @@ public class Check {
         }
     }
 
+    public static void isTrue(boolean expression, String message, Object value1, Object value2, Object value3, Object value4) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.format(message, value1, value2, value3, value4));
+        }
+    }
+
+    public static void isTrue(boolean expression, String message, Object value1, Object value2, Object value3, Object value4, Object value5) {
+        if (!expression) {
+            throw new IllegalArgumentException(String.format(message, value1, value2, value3, value4, value5));
+        }
+    }
+
     public static void notNull(Object obj) {
         if (obj == null) {
             throw new NullPointerException("The validated object is null");
