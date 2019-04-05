@@ -22,6 +22,13 @@ public class ExecutorUtil {
                 new NamedThreadFactory(threadName));
     }
 
+    public static ExecutorService newFixedThreadPoolWithUnlimitedQueue(String threadName, int threadCount, Thread.UncaughtExceptionHandler handler) {
+        return new ThreadPoolExecutor(threadCount, threadCount, 0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                new NamedThreadFactory(threadName, handler),
+                new RejectedExecutionLogger());
+    }
+
     public static ExecutorService newFixedThreadPoolWithLimitedQueue(String threadName, int threadCount, int queueSize) {
         return new ThreadPoolExecutor(threadCount, threadCount, 0L, TimeUnit.MILLISECONDS,
                 new ArrayBlockingQueue<>(queueSize),
