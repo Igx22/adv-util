@@ -1,14 +1,20 @@
 package adv.util;
 
+import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketImpl;
 import java.net.SocketImplFactory;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class SocketUtil {
+
+    public static final List<SocketImpl> ALL_SOCKETS = Collections.synchronizedList(new ArrayList<SocketImpl>());
+
     private static SocketImpl newSocketImpl() {
         try {
             Class<?> defaultSocketImpl = Class.forName("java.net.SocksSocketImpl");
@@ -55,4 +61,24 @@ public class SocketUtil {
             return socket;
         }
     }
+
+    /**
+     * начинаем мониторить все сокеты которые создает процесс
+     */
+    public static void install() {
+        try {
+            Socket.setSocketImplFactory(new SpySocketImplFactory(ALL_SOCKETS));
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
+    /**
+     * получить все сокеты которые мы наблюдаем
+     */
+    public static List<SocketImpl> getAllSockets() {
+        return ALL_SOCKETS;
+    }
+
+
 }

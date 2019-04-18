@@ -16,7 +16,7 @@
 
         <junit.version>4.12</junit.version>
         <guava.version>21.0</guava.version>
-        <javaassist.version>3.20.0-GA</javaassist.version>
+        <javaassist.version>3.24.1-GA</javaassist.version>
     </properties>
 
 
