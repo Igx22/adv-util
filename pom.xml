@@ -79,6 +79,13 @@
             <version>${javaassist.version}</version>
         </dependency>
 
+        <dependency>
+            <!-- https://github.com/ua-parser/uap-java -->
+            <groupId>com.github.coveo</groupId>
+            <artifactId>uap-java</artifactId>
+            <version>1.3.1-coveo1</version>
+        </dependency>
+
 
     </dependencies>
 
