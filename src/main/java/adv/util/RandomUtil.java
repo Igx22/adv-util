@@ -1,6 +1,7 @@
 package adv.util;
 
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomUtil {
 
@@ -17,6 +18,10 @@ public class RandomUtil {
             return false;
         }
         return rnd.nextDouble() <= probability;
+    }
+
+    public static boolean getTrueWithProbability(double probability) {
+        return getTrueWithProbability(ThreadLocalRandom.current(), probability);
     }
 }
 
