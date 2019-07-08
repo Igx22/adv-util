@@ -72,6 +72,13 @@ public class ExecutorUtil {
         return Executors.newSingleThreadExecutor(new NamedThreadFactory(threadName));
     }
 
+    public static ThreadPoolExecutor newObservableSingleThreadExecutor(String threadName) {
+        return new ThreadPoolExecutor(1, 1,
+                0L, TimeUnit.MILLISECONDS,
+                new LinkedBlockingQueue<Runnable>(),
+                new NamedThreadFactory(threadName));
+    }
+
     public static ThreadFactory createNamedThreadFactory(String threadName) {
         return new NamedThreadFactory(threadName);
     }

@@ -565,6 +565,11 @@ public class BitUtil {
         return (((flags >> zeroBasedBitOffset) & 0x01) == 1);
     }
 
+    public static boolean isBitOn(long flags, int zeroBasedBitOffset) {
+        Validate.isTrue(zeroBasedBitOffset >= 0 && zeroBasedBitOffset <= Long.SIZE - 1);
+        return (((flags >> zeroBasedBitOffset) & 0x01) == 1);
+    }
+
     public static boolean isMatchesAnyBitmask(int flags, @NotNull int... bitmasks) {
         Validate.isTrue(bitmasks != null && bitmasks.length > 0);
         for (int bitmask : bitmasks) {
@@ -1237,9 +1242,28 @@ public class BitUtil {
         return storage;
     }
 
+    public static long writeBits(long storage, long payload, int payloadBitSize, int zeroBasedBitOffset) {
+        payload = payload << zeroBasedBitOffset;
+        // освобождаем место под данные
+        if (zeroBasedBitOffset == 0) {
+            storage = storage & longBitMask(zeroBasedBitOffset + payloadBitSize, Long.SIZE - 1);
+        } else {
+            storage = storage & (longBitMask(0, zeroBasedBitOffset - 1) | longBitMask(zeroBasedBitOffset + payloadBitSize, Long.SIZE - 1));
+        }
+        // копируем биты из payload в storage
+        storage = storage | (payload & longBitMask(zeroBasedBitOffset,zeroBasedBitOffset + payloadBitSize));
+        return storage;
+    }
+
     public static int readLowerBits(long storage, int payloadBitSize) {
         long result = storage & setNLowerBits(payloadBitSize);
         return (int)result;
+    }
+
+    public static long readBits(long storage, int payloadBitSize, int zeroBasedBitOffset) {
+        storage = storage >> zeroBasedBitOffset;
+        long result = storage & setNLowerBits(payloadBitSize);
+        return result;
     }
 
     /**
