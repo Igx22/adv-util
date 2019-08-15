@@ -52,6 +52,16 @@ public class ReflectionUtil {
         }
     }
 
+    public static void setDeclaredFieldValue(Object obj, Class clazz, String fieldName, Object value) {
+        try {
+            Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(obj, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     public static Object createInstanceWithoutConstructor(Class clazz) {
         try {
             ReflectionFactory rf = ReflectionFactory.getReflectionFactory();
