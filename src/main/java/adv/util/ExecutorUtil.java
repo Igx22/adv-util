@@ -76,7 +76,18 @@ public class ExecutorUtil {
         return new ThreadPoolExecutor(1, 1,
                 0L, TimeUnit.MILLISECONDS,
                 new LinkedBlockingQueue<Runnable>(),
-                new NamedThreadFactory(threadName));
+                new NamedThreadFactory(threadName)){
+            @Override
+            public void execute(Runnable command) {
+                super.execute(() -> {
+                    try {
+                        command.run();
+                    } catch (Exception e) {
+                        log.error("execute(): {} {}", threadName, e);
+                    }
+                });
+            }
+        };
     }
 
     public static ThreadFactory createNamedThreadFactory(String threadName) {
