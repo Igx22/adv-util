@@ -82,7 +82,7 @@ public class ExecutorUtil {
                 super.execute(() -> {
                     try {
                         command.run();
-                    } catch (Exception e) {
+                    } catch (Throwable e) {
                         log.error("execute(): {} {}", threadName, e);
                     }
                 });
