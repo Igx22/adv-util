@@ -84,7 +84,7 @@ public class ExecutorUtil {
                     try {
                         command.run();
                     } catch (Throwable e) {
-                        log.error("execute(): {} {}", threadName, e);
+                        log.error("execute(): {}", e);
                     }
                 });
             }
