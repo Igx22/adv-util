@@ -47,4 +47,14 @@ public class HashUtil {
         long hash48 = hash64 & 0xFFFFFFFFFFFFL;
         return hash48;
     }
+
+    public static long hash64(String input) {
+        if (input == null) {
+            return 0;
+        }
+        HashFunction hf = Hashing.murmur3_128();
+        HashCode hc = hf.newHasher().putString(input, CharsetUtil.ASCII).hash();
+        long hash32 = hc.asLong();
+        return hash32;
+    }
 }
