@@ -27,4 +27,8 @@ public class IpUtil {
         split[3] = "0";
         return split[0] + "." + split[1] + "." + split[2] + "." + split[3];
     }
+
+    public static int depersonalizeIpv4(int ipV4) {
+        return ipV4 & 0xFFFFFF00;
+    }
 }
