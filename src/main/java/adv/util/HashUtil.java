@@ -34,6 +34,12 @@ public class HashUtil {
         return hash32;
     }
 
+    public static long hashIp(int ip) {
+        HashFunction hf = Hashing.crc32();
+        HashCode hc = hf.newHasher().putInt(ip).hash();
+        return hc.asInt();
+    }
+
 
     public static long hash48(String input) {
         HashFunction hf = Hashing.murmur3_128();
