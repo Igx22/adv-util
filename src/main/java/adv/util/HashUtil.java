@@ -37,7 +37,7 @@ public class HashUtil {
     public static long hashIp(int ip) {
         HashFunction hf = Hashing.crc32();
         HashCode hc = hf.newHasher().putInt(ip).hash();
-        return hc.asInt();
+        return BitUtil.toLongUnsigned(hc.asInt());
     }
 
 
