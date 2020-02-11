@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
  * <p/>
  * YYMMDD HHMMSS.SSS
  * 130613 153923.984
- *
+ * <p>
  * see https://gist.github.com/mscharhag/9195718
  */
 public class DateUtil {
@@ -61,7 +61,7 @@ public class DateUtil {
                 .append(fill2(dt.getHour()))
                 .append(fill2(dt.getMinute()))
                 .append(fill2(dt.getSecond()));
-        if(showMillis) {
+        if (showMillis) {
             output.append('.')
                     .append(fill3(dt.get(ChronoField.MILLI_OF_SECOND)));
         }
@@ -128,6 +128,10 @@ public class DateUtil {
 
     public static long now() {
         return System.currentTimeMillis();
+    }
+
+    public static LocalDateTime timestampToLocalDateTime(long timestamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
     }
 
 }
