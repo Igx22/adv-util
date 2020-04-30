@@ -1,5 +1,6 @@
 package adv.util;
 
+import adv.util.plainsocket.Base91;
 import org.apache.commons.lang3.Validate;
 import org.jetbrains.annotations.NotNull;
 
@@ -1251,13 +1252,13 @@ public class BitUtil {
             storage = storage & (longBitMask(0, zeroBasedBitOffset - 1) | longBitMask(zeroBasedBitOffset + payloadBitSize, Long.SIZE - 1));
         }
         // копируем биты из payload в storage
-        storage = storage | (payload & longBitMask(zeroBasedBitOffset,zeroBasedBitOffset + payloadBitSize));
+        storage = storage | (payload & longBitMask(zeroBasedBitOffset, zeroBasedBitOffset + payloadBitSize));
         return storage;
     }
 
     public static int readLowerBits(long storage, int payloadBitSize) {
         long result = storage & setNLowerBits(payloadBitSize);
-        return (int)result;
+        return (int) result;
     }
 
     public static long readBits(long storage, int payloadBitSize, int zeroBasedBitOffset) {
@@ -1270,7 +1271,7 @@ public class BitUtil {
      * Get an integer bit mask consisting of 1 bits in the given range.  The returned {@code int}
      * will have bits {@code low} through {@code high} set, and all other bits clear.
      *
-     * @param low the low bit value
+     * @param low  the low bit value
      * @param high the high bit value
      * @return the bit mask
      */
@@ -1285,7 +1286,7 @@ public class BitUtil {
      * Get a long bit mask consisting of 1 bits in the given range.  The returned {@code long}
      * will have bits {@code low} through {@code high} set, and all other bits clear.
      *
-     * @param low the low bit value
+     * @param low  the low bit value
      * @param high the high bit value
      * @return the bit mask
      */
