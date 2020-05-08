@@ -1,5 +1,6 @@
 package adv.util;
 
+import adv.util.plainsocket.Base91;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.HashFunction;
 import com.google.common.hash.Hashing;
@@ -54,13 +55,28 @@ public class HashUtil {
         return hash48;
     }
 
+    public static long hash24(String input) {
+        if (StringUtil.isEmpty(input)) {
+            return 0;
+        }
+        long result = hash48(input);
+        long left = result >> 24;
+        long right = result & 0xFFFFFF;
+        result = left ^ right;
+        return result;
+    }
+
     public static long hash64(String input) {
         if (input == null) {
             return 0;
         }
         HashFunction hf = Hashing.murmur3_128();
         HashCode hc = hf.newHasher().putString(input, CharsetUtil.ASCII).hash();
-        long hash32 = hc.asLong();
-        return hash32;
+        return hc.asLong();
+    }
+
+    public static String hashTo4Letters(String input) {
+        long value24 = HashUtil.hash24(input);
+        return Base91.long24ToBase91(value24);
     }
 }
