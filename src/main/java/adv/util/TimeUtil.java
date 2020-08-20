@@ -19,6 +19,7 @@ import java.util.Locale;
 public class TimeUtil {
     public static final DateTimeFormatter FORMATTER_YYYY_MM_DD = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static final DateTimeFormatter FORMATTER_HHMM = DateTimeFormatter.ofPattern("HH:mm");
+    public static final DateTimeFormatter FORMATTER_HHMMSS = DateTimeFormatter.ofPattern("HH:mm:ss.SSS");
     public static final DateTimeFormatter FORMATTER_DDMMM_HHMM = DateTimeFormatter.ofPattern("dd.MMM HH:mm");
     public static final DateTimeFormatter FORMATTER_DDMMYYYY = DateTimeFormatter.ofPattern("dd.MM.yyyy");
     public static final DateTimeFormatter FORMATTER_DDMM = new DateTimeFormatterBuilder().appendPattern("dd.MM")
