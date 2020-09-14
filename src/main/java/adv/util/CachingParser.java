@@ -1,6 +1,6 @@
 package adv.util;
 
-import com.github.coveo.ua_parser.*;
+import ua_parser.*;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.slf4j.Logger;
